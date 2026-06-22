@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information Technology Resource Sharing Platform</title>
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            height: 75px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 25px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            font-family: Georgia, serif;
+            color: #003366;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .header-right span {
+            color: #555;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .header-right span:hover {
+            color: #003366;
+            background: rgba(0,51,102,0.1);
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            text-align: center;
+            padding: 40px 20px 20px;
+            color: white;
+        }
+
+        .hero h1 {
+            font-family: Georgia, serif;
+            font-size: 36px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .hero p {
+            font-size: 16px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            padding: 20px 20px 40px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            width: 380px;
+            background: white;
+            border: none;
+            border-radius: 20px;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #003366, #0055aa);
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .card .icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .card h1 {
+            font-family: Georgia, serif;
+            color: #003366;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+
+        .card p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #003366, #0055aa);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            display: inline-block;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, #0055aa, #003366);
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(0,51,102,0.4);
+        }
+
+        .card .badge {
+            display: inline-block;
+            background: #e8f0fe;
+            color: #003366;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* ===== FEATURES BAR ===== */
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 20px;
+            flex-wrap: wrap;
+            color: white;
+            opacity: 0.9;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px 25px;
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+        }
+
+        .footer b {
+            color: white;
+            font-family: Georgia, serif;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header {
+                padding: 0 15px;
+                height: auto;
+                min-height: 60px;
+                flex-wrap: wrap;
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .hero h1 {
+                font-size: 26px;
+            }
+
+            .container {
+                gap: 25px;
+                padding: 20px 15px;
+            }
+
+            .card {
+                width: 100%;
+                max-width: 380px;
+                padding: 30px 25px;
+            }
+
+            .features {
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .card {
+                padding: 25px 20px;
+            }
+
+            .card h1 {
+                font-size: 24px;
+            }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">📚 Information Technology Resource Sharing Platform</div>
+        <div class="header-right">
+            <span onclick="showHelp()">❓ Help</span>
+        </div>
+    </div>
+
+    <div class="hero fade-in">
+        <h1>Welcome to IT Resource Hub</h1>
+        <p>Your one-stop destination for academic resources, notes, assignments, and study materials</p>
+    </div>
+
+    <div class="features fade-in">
+        <div class="feature-item">📖 63+ Subjects</div>
+        <div class="feature-item">👨‍🎓 106 Students</div>
+        <div class="feature-item">📁 Unlimited Resources</div>
+        <div class="feature-item">🔒 Secure Access</div>
+    </div>
+
+    <div class="container fade-in">
+        <a href="student-login.html" class="card">
+            <span class="badge">Student Portal</span>
+            <div class="icon">👨‍🎓</div>
+            <h1>Student</h1>
+            <p>Access notes, study materials, assignments, question papers, and academic resources for all semesters</p>
+            <span class="login-btn">Student Login →</span>
+        </a>
+        <a href="admin-login.html" class="card">
+            <span class="badge">Admin Portal</span>
+            <div class="icon">👨‍💼</div>
+            <h1>Admin</h1>
+            <p>Manage students, upload resources, control academic documents, and monitor platform activity</p>
+            <span class="login-btn">Admin Login →</span>
+        </a>
+    </div>
+
+    <div class="footer">
+        <b>Information Technology Department</b> &nbsp;|&nbsp; © 2026 Resource Sharing Platform &nbsp;|&nbsp; All rights reserved
+    </div>
+
+    <script>
+        function showHelp() {
+            alert(
+                "Welcome to the IT Resource Sharing Platform!\n\n" +
+                "👨‍🎓 STUDENTS:\n" +
+                "• Use Roll Number (2438010001 to 2438010114)\n" +
+                "• Password: IT2428\n" +
+                "• Access notes, materials, assignments & papers\n\n" +
+                "👨‍💼 ADMIN:\n" +
+                "• Username: rajapavi\n" +
+                "• Password: rajapavi0330\n" +
+                "• Manage all resources and students\n\n" +
+                "For assistance, contact the IT Department."
+            );
+        }
+    </script>
+
+</body>
+</html>

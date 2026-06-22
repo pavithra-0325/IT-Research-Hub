@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login - Information Technology</title>
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            height: 75px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 25px;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            font-family: Georgia, serif;
+            color: #003366;
+        }
+
+        .back-btn {
+            padding: 10px 22px;
+            border: 2px solid #003366;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            color: #003366;
+            font-size: 14px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            background: #003366;
+            color: white;
+            transform: translateX(-3px);
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .card {
+            width: 440px;
+            background: white;
+            border: none;
+            border-radius: 20px;
+            padding: 45px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card h1 {
+            text-align: center;
+            margin-bottom: 8px;
+            color: #003366;
+            font-family: Georgia, serif;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: #003366;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(0,51,102,0.1);
+        }
+
+        .input.error {
+            border-color: #dc3545;
+            background: #fff5f5;
+        }
+
+        .input.success {
+            border-color: #28a745;
+            background: #f0fff4;
+        }
+
+        .forgot-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .forgot {
+            font-size: 13px;
+            color: #003366;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .forgot:hover {
+            color: #0055aa;
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #003366, #0055aa);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, #0055aa, #003366);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,51,102,0.4);
+        }
+
+        .login-btn:active {
+            transform: scale(0.98);
+        }
+
+        .login-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .login-btn .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid white;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .login-btn.loading .spinner {
+            display: block;
+        }
+
+        .login-btn.loading .btn-text {
+            display: none;
+        }
+
+        .error-msg {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+            padding-left: 5px;
+        }
+
+        .error-msg.show {
+            display: block;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .info-box {
+            background: #e8f0fe;
+            border-left: 4px solid #003366;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .info-box strong {
+            color: #003366;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 500px) {
+            .card {
+                width: 100%;
+                max-width: 400px;
+                padding: 25px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .header {
+                padding: 0 15px;
+            }
+
+            .icon {
+                font-size: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">📚 Information Technology</div>
+        <a href="index.html" class="back-btn">← Home</a>
+    </div>
+
+    <div class="container">
+        <div class="icon">🎓</div>
+        <div class="card">
+            <h1>Student Sign In</h1>
+            <p class="subtitle">Access Notes, Resources and Study Materials</p>
+
+            <div class="info-box">
+                <strong>💡 Hint:</strong> Roll numbers 2438010001 to 2438010114 | Password: IT2428
+            </div>
+
+            <div class="form-group">
+                <label for="rollno">Roll Number</label>
+                <input class="input" type="text" id="rollno" placeholder="2438010001" autocomplete="off" maxlength="10">
+                <div class="error-msg" id="rollno-error">Please enter a valid roll number</div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">
+                    Password
+                    <span class="forgot" onclick="forgotPassword()">Forgot Password?</span>
+                </label>
+                <input class="input" type="password" id="password" placeholder="Enter Password">
+                <div class="error-msg" id="password-error">Please enter your password</div>
+            </div>
+
+            <button type="button" class="login-btn" id="loginBtn" onclick="studentLogin()">
+                <span class="btn-text">Login</span>
+                <div class="spinner"></div>
+            </button>
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2026 Information Technology Department
+    </div>
+
+    <script>
+        // ===== REAL-TIME VALIDATION =====
+        document.getElementById("rollno").addEventListener("input", function() {
+            let val = this.value.trim();
+            let error = document.getElementById("rollno-error");
+            let rollPattern = /^243801\d{4}$/;
+
+            if (val && !rollPattern.test(val)) {
+                this.classList.add("error");
+                this.classList.remove("success");
+            } else if (val && rollPattern.test(val)) {
+                this.classList.remove("error");
+                this.classList.add("success");
+                error.style.display = "none";
+            } else {
+                this.classList.remove("error", "success");
+            }
+        });
+
+        document.getElementById("password").addEventListener("input", function() {
+            let error = document.getElementById("password-error");
+            if (this.value.trim()) {
+                this.classList.remove("error");
+                error.style.display = "none";
+            }
+        });
+
+        // ===== STUDENT LOGIN FUNCTION =====
+        function studentLogin() {
+            let rollNoInput = document.getElementById("rollno").value.trim();
+            let password = document.getElementById("password").value.trim();
+            let rollnoError = document.getElementById("rollno-error");
+            let passwordError = document.getElementById("password-error");
+            let btn = document.getElementById("loginBtn");
+
+            // Reset errors
+            rollnoError.style.display = "none";
+            passwordError.style.display = "none";
+            document.getElementById("rollno").classList.remove("error");
+            document.getElementById("password").classList.remove("error");
+
+            let hasError = false;
+
+            if (!rollNoInput) {
+                rollnoError.textContent = "Please enter your roll number";
+                rollnoError.classList.add("show");
+                document.getElementById("rollno").classList.add("error");
+                hasError = true;
+            }
+
+            if (!password) {
+                passwordError.textContent = "Please enter your password";
+                passwordError.classList.add("show");
+                document.getElementById("password").classList.add("error");
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            // Validate roll number format
+            let rollPattern = /^243801\d{4}$/;
+            if (!rollPattern.test(rollNoInput)) {
+                rollnoError.textContent = "Invalid roll number format (Expected: 2438010001-2438010114)";
+                rollnoError.classList.add("show");
+                document.getElementById("rollno").classList.add("error");
+                return;
+            }
+
+            let roll = parseInt(rollNoInput, 10);
+
+            // Show loading
+            btn.classList.add("loading");
+            btn.disabled = true;
+
+            // Simulate loading for better UX
+            setTimeout(function() {
+                if (roll >= 2438010001 && roll <= 2438010114 && password === "IT2428") {
+                    sessionStorage.setItem("studentLoggedIn", "true");
+                    sessionStorage.setItem("studentRoll", rollNoInput);
+                    sessionStorage.setItem("studentLoginTime", new Date().toISOString());
+                    alert("✅ Student Login Successful!\n\nWelcome, Roll Number: " + rollNoInput);
+                    window.location.href = "student_dashboard.html";
+                } else {
+                    btn.classList.remove("loading");
+                    btn.disabled = false;
+                    alert(
+                        "❌ Invalid Roll Number or Password\n\n" +
+                        "Hint: Roll numbers 2438010001 to 2438010114\n" +
+                        "Password: IT2428"
+                    );
+                }
+            }, 800);
+        }
+
+        // ===== FORGOT PASSWORD =====
+        function forgotPassword() {
+            alert(
+                "🔐 Password Recovery\n\n" +
+                "Please contact the Department Admin to reset your password.\n\n" +
+                "Email: admin@university.edu\n" +
+                "Office: IT Department, Room 101"
+            );
+        }
+
+        // ===== KEYBOARD SHORTCUTS =====
+        document.getElementById("password").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") studentLogin();
+        });
+
+        document.getElementById("rollno").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") document.getElementById("password").focus();
+        });
+
+        // ===== AUTO-FOCUS =====
+        window.addEventListener("load", function() {
+            document.getElementById("rollno").focus();
+        });
+    </script>
+
+</body>
+</html>
