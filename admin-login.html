@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Information Technology</title>
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            height: 75px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 25px;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            font-family: Georgia, serif;
+            color: white;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .header-right span {
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .header-right span:hover {
+            color: white;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .back-btn {
+            padding: 10px 22px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 10px;
+            background: transparent;
+            cursor: pointer;
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: white;
+            transform: translateX(-3px);
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .card {
+            width: 450px;
+            background: rgba(255,255,255,0.95);
+            border: none;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card h1 {
+            text-align: center;
+            font-family: Georgia, serif;
+            font-size: 32px;
+            color: #003366;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            margin: 15px 0 35px;
+            color: #555;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: #003366;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(0,51,102,0.1);
+        }
+
+        .input.error {
+            border-color: #dc3545;
+            background: #fff5f5;
+        }
+
+        .forgot {
+            font-size: 13px;
+            color: #003366;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .forgot:hover {
+            color: #0055aa;
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #003366, #0055aa);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, #0055aa, #003366);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,51,102,0.4);
+        }
+
+        .login-btn:active {
+            transform: scale(0.98);
+        }
+
+        .login-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .login-btn .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid white;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .login-btn.loading .spinner {
+            display: block;
+        }
+
+        .login-btn.loading .btn-text {
+            display: none;
+        }
+
+        .error-msg {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+            padding-left: 5px;
+        }
+
+        .error-msg.show {
+            display: block;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .info-box {
+            background: #e8f0fe;
+            border-left: 4px solid #003366;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .info-box strong {
+            color: #003366;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            padding: 20px 25px;
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .footer a {
+            margin: 0 12px;
+            text-decoration: none;
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .footer div {
+            font-size: 14px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .header {
+                padding: 0 15px;
+                height: auto;
+                min-height: 60px;
+                flex-wrap: wrap;
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .card {
+                width: 100%;
+                max-width: 450px;
+                padding: 30px;
+            }
+
+            .card h1 {
+                font-size: 26px;
+            }
+
+            .footer {
+                flex-direction: column;
+                justify-content: center;
+                gap: 10px;
+                padding: 15px;
+                text-align: center;
+            }
+
+            .footer a {
+                display: block;
+                margin: 5px 0;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .card {
+                padding: 25px 20px;
+            }
+
+            .card h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">📚 Information Technology</div>
+        <div class="header-right">
+            <span onclick="showHelp()">❓ Help</span>
+            <a href="index.html" class="back-btn">← Home</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="icon">👨‍💼</div>
+        <div class="card">
+            <h1>Admin Sign In</h1>
+            <p class="subtitle">Enter admin credentials to manage<br>academic resources.</p>
+
+           
+            <div class="form-group">
+                <label for="admin-email">Admin Email / Username</label>
+                <input class="input" type="text" id="admin-email" placeholder="admin@university.edu" autocomplete="off">
+                <div class="error-msg" id="email-error">Please enter your username</div>
+            </div>
+
+            <div class="form-group">
+                <label for="admin-password">
+                    Password
+                    <span class="forgot" onclick="forgotPassword()">Forgot Password?</span>
+                </label>
+                <input class="input" type="password" id="admin-password" placeholder="Enter your password">
+                <div class="error-msg" id="password-error">Please enter your password</div>
+            </div>
+
+            <button type="button" class="login-btn" id="loginBtn" onclick="adminLogin()">
+                <span class="btn-text">Admin Login</span>
+                <div class="spinner"></div>
+            </button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div><b>Information Technology</b></div>
+        <div>
+            <a href="#" onclick="alert('Terms: This platform is for educational use only.'); return false;">Terms of Service</a>
+            <a href="#" onclick="alert('Privacy: We store only necessary academic data locally.'); return false;">Privacy Policy</a>
+            <a href="#" onclick="showHelp(); return false;">Support</a>
+        </div>
+        <div>© 2026 Information Technology</div>
+    </div>
+
+    <script>
+        // ===== REAL-TIME VALIDATION =====
+        document.getElementById("admin-email").addEventListener("input", function() {
+            if (this.value.trim()) {
+                this.classList.remove("error");
+                document.getElementById("email-error").style.display = "none";
+            }
+        });
+
+        document.getElementById("admin-password").addEventListener("input", function() {
+            if (this.value.trim()) {
+                this.classList.remove("error");
+                document.getElementById("password-error").style.display = "none";
+            }
+        });
+
+        // ===== FORGOT PASSWORD =====
+        function forgotPassword() {
+            let email = prompt("Enter your admin email or username:");
+            if (email && email.trim()) {
+                alert("✅ Password reset link sent to: " + email.trim() + "\n\nPlease check your email inbox.");
+            } else {
+                alert("Please enter a valid email or username.");
+            }
+        }
+
+        // ===== ADMIN LOGIN =====
+        function adminLogin() {
+            let username = document.getElementById("admin-email").value.trim();
+            let password = document.getElementById("admin-password").value.trim();
+            let emailError = document.getElementById("email-error");
+            let passwordError = document.getElementById("password-error");
+            let btn = document.getElementById("loginBtn");
+
+            // Reset errors
+            emailError.style.display = "none";
+            passwordError.style.display = "none";
+            document.getElementById("admin-email").classList.remove("error");
+            document.getElementById("admin-password").classList.remove("error");
+
+            let hasError = false;
+
+            if (!username) {
+                emailError.textContent = "Please enter your username";
+                emailError.classList.add("show");
+                document.getElementById("admin-email").classList.add("error");
+                hasError = true;
+            }
+
+            if (!password) {
+                passwordError.textContent = "Please enter your password";
+                passwordError.classList.add("show");
+                document.getElementById("admin-password").classList.add("error");
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            // Show loading
+            btn.classList.add("loading");
+            btn.disabled = true;
+
+            setTimeout(function() {
+                // Default Admin Login
+                if (username === "rajapavi" && password === "rajapavi0330") {
+                    sessionStorage.setItem("adminLoggedIn", "true");
+                    sessionStorage.setItem("adminUser", username);
+                    sessionStorage.setItem("adminLoginTime", new Date().toISOString());
+                    alert("✅ Admin Login Successful!\n\nWelcome, Admin Rajaram Pavithra");
+                    window.location.href = "admin-dashboard.html";
+                } else {
+                    btn.classList.remove("loading");
+                    btn.disabled = false;
+                    alert(
+                        "❌ Invalid Username or Password\n\n" +
+                        "Hint: Use your admin credentials provided by the department."
+                    );
+                }
+            }, 800);
+        }
+
+        // ===== HELP =====
+        function showHelp() {
+            alert(
+                "👨‍💼 Admin Login Help\n\n" +
+                "Default Credentials:\n" +
+                "Username: rajapavi\n" +
+                "Password: rajapavi0330\n\n" +
+                "For assistance, contact IT Department."
+            );
+        }
+
+        // ===== KEYBOARD SHORTCUTS =====
+        document.getElementById("admin-password").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") adminLogin();
+        });
+
+        document.getElementById("admin-email").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") document.getElementById("admin-password").focus();
+        });
+
+        // ===== AUTO-FOCUS =====
+        window.addEventListener("load", function() {
+            document.getElementById("admin-email").focus();
+        });
+    </script>
+
+</body>
+</html>
